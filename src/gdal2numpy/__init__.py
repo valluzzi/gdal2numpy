@@ -22,17 +22,6 @@
 #
 # Created:
 #-------------------------------------------------------------------------------
-import os
-import importlib.util
-
-# Point PROJ at rasterio's bundled proj.db (must happen before any PROJ import)
-_spec = importlib.util.find_spec('rasterio')
-if _spec and _spec.submodule_search_locations:
-    _proj_data = os.path.join(list(_spec.submodule_search_locations)[0], 'proj_data')
-    if os.path.isdir(_proj_data):
-        os.environ['PROJ_DATA'] = _proj_data
-        os.environ['PROJ_LIB'] = _proj_data
-
 from .filesystem import *
 from .module_types import *
 from .module_geolocate import *
