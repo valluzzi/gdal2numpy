@@ -1,6 +1,6 @@
 import setuptools
 
-VERSION = "0.0.535"
+VERSION = "0.0.536"
 PACKAGE_NAME = "gdal2numpy"
 AUTHOR = "Valerio Luzzi, Marco Renzi, Lorenzo Borelli"
 EMAIL = "valerio.luzzi@gecosistema.com, marco.renzi@gecosistema.com"
@@ -23,7 +23,6 @@ setuptools.setup(
     },
     classifiers=[
         "Programming Language :: Python :: 3",
-        "License :: OSI Approved :: MIT License",
         "Operating System :: OS Independent",
     ],
     install_requires=[
@@ -38,6 +37,7 @@ setuptools.setup(
         "xmltodict" 
     ]
 )
+
 
 
 
