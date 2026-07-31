@@ -87,14 +87,14 @@ def RasterizeLike(fileshp, filedem, fileout="", dtype=None, burn_fieldname=None,
 
         # Open the data source and read in the extent
         # layer = vector.GetLayer()
-        # Instead of just get the layer we copy the layer on memory
+        # Instead of just get the layer we copy the layer on 
         # and we add a buffer and we transform each geometry
         # if needed
 
         vlayer = vector.GetLayer()
         s_srs = GetSpatialRef(vlayer.GetSpatialRef())
         t_srs = GetSpatialRef(prj)
-        driver = ogr.GetDriverByName("MEMORY")
+        driver = ogr.GetDriverByName("MEM")
         source = driver.CreateDataSource("memData")
         layer = source.CreateLayer(vlayer.GetName(), t_srs, geom_type=vlayer.GetGeomType())
         # Copy the fields from the source layer to the memory layer
