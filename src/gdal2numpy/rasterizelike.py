@@ -94,7 +94,7 @@ def RasterizeLike(fileshp, filedem, fileout="", dtype=None, burn_fieldname=None,
         vlayer = vector.GetLayer()
         s_srs = GetSpatialRef(vlayer.GetSpatialRef())
         t_srs = GetSpatialRef(prj)
-        driver = ogr.GetDriverByName("MEM")
+        driver = ogr.GetDriverByName("MEMORY")
         source = driver.CreateDataSource("memData")
         layer = source.CreateLayer(vlayer.GetName(), t_srs, geom_type=vlayer.GetGeomType())
         # Copy the fields from the source layer to the memory layer
@@ -161,7 +161,8 @@ def RasterizeLike(fileshp, filedem, fileout="", dtype=None, burn_fieldname=None,
             # if factor is not 1 then burn the field value multiplied by factor
             # in case of fieldname we have to pre multiply the each feature value by factor
             # To not modify the original layer we have to copy it in memory
-            memds = ogr.GetDriverByName("MEM").CopyDataSource(vector, "tmp")
+            driver = ogr.GetDriverByName("MEMORY")
+            memds = driver.CopyDataSource(vector, "tmp")
             layercpy = memds.GetLayer()
             for feature in layercpy:
                 feature.SetField(burn_fieldname, feature.GetField(burn_fieldname) * factor)

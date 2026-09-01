@@ -182,7 +182,7 @@ def Numpy2GTiff(arr, gt, prj, fileout, format="GTiff", save_nodata_as=-9999, met
 
             # Create the output dataset
             driver = gdal.GetDriverByName(drivername)  # GTiff or MEM
-            ds = driver.Create(filetif, cols, rows, 1, dtype, MEM_CO)  # fileout is ignore if MEM
+            ds = driver.Create(filetif, cols, rows, 1, dtype, MEM_CO)  # fileout is ignored if MEM
 
             if gt is not None:
                 ds.SetGeoTransform(gt)
@@ -213,7 +213,7 @@ def Numpy2GTiff(arr, gt, prj, fileout, format="GTiff", save_nodata_as=-9999, met
             ds.GetRasterBand(1).WriteArray(arr)
 
             if cog:
-                Logger.debug(f"Creating a COG..{CO}")
+                Logger.debug("Creating a COG..%s",CO)
                 driver = gdal.GetDriverByName("COG")
                 # ds.BuildOverviews('NEAREST', [2, 4, 8, 16, 32])
                 ds.BuildOverviews("NEAREST", CalculateOverviews(ds))
@@ -290,7 +290,7 @@ def Numpy2GTiffMultiBanda(arr, gt, prj, fileout, format="GTiff", save_nodata_as=
 
             # Create the output dataset
             driver = gdal.GetDriverByName(drivername)  # GTiff or MEM
-            ds = driver.Create(filetif, cols, rows, nb, dtype, MEM_CO)  # fileout is ignore if MEM
+            ds = driver.Create(filetif, cols, rows, nb, dtype, MEM_CO)  # fileout is ignored if MEM
 
             if gt is not None:
                 ds.SetGeoTransform(gt)
@@ -322,7 +322,7 @@ def Numpy2GTiffMultiBanda(arr, gt, prj, fileout, format="GTiff", save_nodata_as=
                     ds.GetRasterBand(b+1).WriteArray(data)
 
             if cog:
-                Logger.debug(f"Creating a COG..{CO}")
+                Logger.debug("Creating a COG..%s", CO)
                 driver = gdal.GetDriverByName("COG")
                 # ds.BuildOverviews('NEAREST', [2, 4, 8, 16, 32])
                 ds.BuildOverviews("NEAREST", CalculateOverviews(ds))
