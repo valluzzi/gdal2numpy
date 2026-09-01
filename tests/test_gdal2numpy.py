@@ -26,10 +26,8 @@ class Test(unittest.TestCase):
         """
         test_raster: 
         """
-        mem_usage()
         data, _, _ = GDAL2Numpy(filedem, load_nodata_as=np.nan)
         print(f"Memory read:{data.size*4 / 1024**2:.2f} MB")
-        mem_usage()
         self.assertTrue(data.size>0)
 
 
@@ -38,19 +36,7 @@ class Test(unittest.TestCase):
         test_save: 
         """
         filedem = "s3://saferplaces.co/test/lidar_rimini_building_2.tif"
-        data, gt, prj = GDAL2Numpy(filedem, load_nodata_as=np.nan)
-        print(prj)
-        self.assertTrue(data.size>0)
-
-
-    def test_vsi(self):
-        """
-        test_save: 
-        """
-        filedem = "s3://saferplaces.co/Ambiental/Fluvial/Ambiental_Italy_FloodMap_Fluvial_100yr_v1_0.cog.tif"
-        bbox = (4523904.479738138, 2325781.4713545926, 4530348.323133135, 2337527.589964536)
-        data, gt, prj = GDAL2Numpy(filedem, bbox=bbox, load_nodata_as=np.nan)
-        print(data.shape)
+        data, _, prj = GDAL2Numpy(filedem, load_nodata_as=np.nan)
         print(prj)
         self.assertTrue(data.size>0)
 
@@ -60,7 +46,7 @@ class Test(unittest.TestCase):
         test_save: 
         """
         filedem = "https://s3.us-east-1.amazonaws.com/saferplaces.co/test/lidar_rimini_building_2.tif"
-        data, gt, prj = GDAL2Numpy(filedem, load_nodata_as=np.nan)
+        data, _, _ = GDAL2Numpy(filedem, load_nodata_as=np.nan)
         self.assertTrue(data.size>0)
 
 

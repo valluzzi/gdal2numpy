@@ -86,8 +86,13 @@ def gdal_merge(filelist, fileout, format="GTiff"):
     format = format.lower() or "gtiff"
 
     creation_options = co.get(format, [])
+    print("List of temporary files:", filelist_tmp)
 
     ds = gdal.BuildVRT(filevrt, filelist_tmp, **{"srcNodata": -9999})
+    if ds is None:
+        Logger.error("gdal_merge: no valid input rasters in %s", filelist)
+        remove(filelist_tmp)
+        return None
     ds.FlushCache()
     del ds
 

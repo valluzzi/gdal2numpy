@@ -117,7 +117,7 @@ def GetRange(fileshp, fieldname):
     """
     GetRange - returns the min-max values
     """
-    minValue, maxValue = np.Inf, -np.Inf
+    minValue, maxValue = np.inf, -np.inf
     if fieldname in GetFieldNames(fileshp, ["Integer", "Integer64", "Real"]):
         for feature in GetFeatures(fileshp):
             value = feature.GetField(fieldname)
@@ -183,7 +183,6 @@ def AddField(fileshp, fieldname, dtype=np.float32, width=-1, precision=-1, defau
         np.float64: {"dtype": ogr.OFTReal, "width": 24, "precision": 6},
         np.bool_: {"dtype": ogr.OFTInteger, "width": 1, "precision": 0},
         np.str_: {"dtype": ogr.OFTString, "width": 254, "precision": 0},
-        np.unicode_: {"dtype": ogr.OFTString, "width": 254, "precision": 0},
         str: {"dtype": ogr.OFTString, "width": 254, "precision": 0},
     }
     res = False
