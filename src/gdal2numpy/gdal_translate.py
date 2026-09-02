@@ -25,11 +25,13 @@
 import os
 import numpy as np
 from osgeo import gdal
-from .filesystem import tempfilename, justpath
+from .filesystem import tempfilename, justpath, version_lower
 from .filesystem import now, total_seconds_from
 from .module_ogr import GetExtent
 from .module_s3 import move, copy, iss3
 from .module_log import Logger
+from .module_GDAL2Numpy import GDAL2Numpy
+from .module_Numpy2GTiff import Numpy2GTiff
 
 dtypeOf = {
     "byte": gdal.GDT_Byte,
@@ -132,6 +134,22 @@ def gdal_translate(filein, fileout=None, ot=None, a_nodata=None, projwin=None, p
         gdal.Translate(filetmp, filein, **kwargs)
         #print(f"---")
     # end of workaround --------------------------------------------
+
+    # WORKAROUND: When using nearest-neighbor resampling, the window specified by -projwin is expanded (rounded, for GDAL < 3.11) if necessary to match input pixel boundaries. For other resampling algorithms, the window is not modified. (see: https://gdal.org/en/stable/programs/gdal_translate.html#cmdoption-gdal_translate-projwin)
+    tmp_extent = GetExtent(fileout)
+    if version_lower(gdal.__version__, '3.11') and list(tmp_extent) != list(projwin):
+        Logger.warning(f"gdal_translate: projwin {projwin} does not match the extent of the output file {tmp_extent}. This is a known issue with GDAL < 3.11 when using nearest-neighbor resampling. Forcing specified gt into output file.")
+        tmp_data, tmp_gt, tmp_prj = GDAL2Numpy(filetmp, load_nodata_as=np.nan)
+        # Force gt to match projwin
+        tmp_gt = list(tmp_gt)
+        tmp_gt[0] = projwin[0]
+        tmp_gt[3] = projwin[1]
+        kwargs = {
+            ** ( {'save_nodata_as': a_nodata} if a_nodata is not None else dict() ),
+        }
+        filetmp = Numpy2GTiff(tmp_data, tmp_gt, tmp_prj, tempfilename(prefix="gdal_translate/tmp_", suffix=".tif"), **kwargs)
+    # end of workaround ------------------------------------------------
+        
 
     move(filetmp, fileout)
 

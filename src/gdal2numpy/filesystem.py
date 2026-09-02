@@ -406,3 +406,19 @@ def locked_by(filename):
             locker, _ = f.read().split(",")
             return locker
     return None
+
+
+def version_lower(current_version, version, strict=False):
+    if strict and current_version == version:
+        return False
+    current_version = current_version.split(".")
+    version = version.split(".")
+    max_length = max(len(current_version), len(version))
+    current_version += ['0'] * (max_length - len(current_version))
+    version += ['0'] * (max_length - len(version))
+    for i in range(max_length):
+        if int(current_version[i]) < int(version[i]):
+            return True
+        elif int(current_version[i]) > int(version[i]):
+            return False
+    return True
